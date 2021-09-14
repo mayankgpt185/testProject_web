@@ -1,0 +1,113 @@
+select {
+    width: 100%;
+    padding: 12px 4px;
+    margin: 6px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    box-sizing: border-box;
+}
+
+.input-group-lg {
+    >.form-control {
+        height: 40px;
+        margin: 6px 0;
+        border-radius: 0px;
+        font-size: 18px;
+    }
+    >.input-group-addon {
+        height: 40px;
+        margin: 6px 0;
+        border-radius: 0px;
+        font-size: 18px;
+    }
+    >.input-group-btn {
+        >.btn {
+            height: 40px;
+            margin: 6px 0;
+            border-radius: 0px;
+            font-size: 18px;
+        }
+    }
+}
+
+.fa-chevron-down {
+    &:before {
+        float: right;
+    }
+}
+
+#dropdown-btn {
+    width: 100%;
+    padding: 7px 4px;
+    margin: 5px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    box-sizing: border-box;
+}
+
+.collapse {
+    position: absolute;
+    overflow-y: scroll;
+    max-height: 300px;
+    max-width: 400px;
+    background-color: ivory;
+    border-collapse: collapse;
+    border: 1px solid lightslategray;
+    z-index: 2;
+}
+
+.drop {
+    overflow-x: hidden;
+    border-bottom: 1px solid;
+    border-top: none;
+    top: 5px;
+}
+
+.size {
+    max-height: 70%;
+    border-radius: 0px;
+    background-color: lightslategrey;
+    color: #fff;
+}
+
+.deleteStyle {
+    color: red;
+}
+
+.align {
+    text-align: left;
+}
+
+.point {
+    cursor: pointer;
+}
+
+.button-save {
+    width: 150px;
+    background: cadetblue;
+    font-size: medium;
+}
+
+.tacho-table {
+    margin: 20px;
+    width: 98%;
+}
+
+.thead {
+    .th {
+        cursor: pointer;
+        margin-right: 15px;
+        margin-left: 15px;
+        .span {
+            visibility: hidden;
+        }
+    }
+    .th.active {
+        color: #000;
+        .span {
+            visibility: visible;
+        }
+    }
+}

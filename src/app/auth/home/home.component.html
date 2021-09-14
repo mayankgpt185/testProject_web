@@ -1,0 +1,185 @@
+<div class="row full">
+    <div [ngClass]="{'col-md-12': hideShowFlg === false, 'col-lg-9':hideShowFlg === true }">
+      
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-4 font-20 pt-2">
+                        <h2>Employee List</h2>
+                    </div>
+                    <div class="col-md-4 offset-md-4 text-right font-20 pt-2">
+                        <h3 (click)="logout()"><i class="fa fa-sign-out" aria-hidden="true" ></i>Logout</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-1">
+           
+            <div class="col-lg-3 col-md-4 offset-md-8 pt-2" [hidden]="hideShowFlg" >
+                <button class="btn float-right btn-lg pb-3 py-1 size" (click)="hideShow('1')" ><strong>Create Employee</strong>    
+                    <i class="fa fa-user-plus pl-1" aria-hidden="true"></i></button>
+            </div>
+        </div>
+        <!--Table-->
+        <div class="table-responsive" style="max-height:500px;overflow:auto;">
+            <table class="table table-hover table-bordered mt-2 tacho-table">
+                <thead >
+                    <tr>
+                        <th>Name</th>
+                        <th>address</th>
+                        <th>Date of Birth</th>
+                        <th>Mobile Number</th>
+                        <th>City</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of employeeData| paginate: { itemsPerPage: showData.rowsPerPage, currentPage: p } ; let i=index">
+                        <td>{{data.firstName}} {{data.lastName}}</td>
+                        <td>{{data.address}}</td>
+                        <td>{{data.dob| date:"dd-MMM-yyyy"}}</td>
+                        <td>{{data.mobile}}</td>
+                        <td>{{data.city}}</td>
+                        <td class="text-center"><button class="btn text-success" type="button"
+                                (click)="editUserInfo(data, i);"><i class="fa fa-pencil" style="font-size: 19px;" aria-hidden="true"></i></button>
+                        </td>
+                        <td class="text-center"><button class="btn btn-view btn-sm" type="button"
+                                (click)="activeAndDeactive(data.employeeSkey)"><i class="fa fa-trash" style="font-size: 19px;" aria-hidden="true"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!--Pagination-->
+        <div class="row mt-2 col-xs-2">
+            <!--Show Records-->
+            <div class="col-md-4 mt-2">              
+                <div class="show-rows " >
+                <span class="pr-1">Show Records</span><input class="rowsPerPage " type = "number"  min="1" 
+                    [(ngModel)]="showData.rowsPerPage" name="rowsPerPage" #rowsPerPage="ngModel" pattern="^[1-9][0-9]*$"  placeholder = "Rows">
+                </div>
+                <div *ngIf="rowsPerPage.invalid || rowsPerPage.touched">
+                    <p *ngIf="rowsPerPage.errors?.pattern" class="help-bpx" class="help-bpx" style="color: red;">
+                        Please Enter value greater than 0.</p>
+                </div>
+            </div>
+            <!--Pagination-->
+            <div class="col-md-8 "> 
+                <div class="float-right mt-2">
+                    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                </div>
+            </div>
+        </div>
+        <!-- Table End-->
+    </div>
+    <div class="col-lg-3 col-md-12" [hidden]="!hideShowFlg" style="height:1000px;overflow:auto;">
+        <div class="card">
+            
+            <div class="card-header font-20"><strong (click)="hideShow('0')">Create Employee <i class="fa fa-minus-square-o pull-right mg-t-10" aria-hidden="true"></i></strong></div>
+            <!--form start-->
+            <div class="card-body"> 
+                <form #createUserForm="ngForm" (ngSubmit)="createUserForm.form.valid && saveUser(createUserForm)"
+                    novalidate  autocomplete="off">
+                    <!--first name-->
+                    <div class="form-group">
+                        <label for="firstName">First Name<span style="color: red;" class="required-field">*</span></label>
+                        <input type="text" class="form-control"  pattern="[ a-zA-Z][a-zA-Z ]+" 
+                            placeholder="Enter First Name" [(ngModel)]="formData.firstName" 
+                            name="firstName" required #firstName="ngModel">
+                        <div *ngIf="createUserForm.submitted && firstName.invalid || firstName.touched">
+                            <div *ngIf="firstName.touched || createUserForm.submitted">
+                                <p *ngIf="firstName.errors?.required " class="help-bpx" class="help-bpx"
+                                    style="color: red;">Please enter first name.</p>
+                                <p *ngIf="firstName.errors?.pattern" class="help-bpx"
+                                    class="help-bpx" style="color: red;">
+                                    Please enter valid name</p>
+                            </div>
+                        </div> 
+                    </div>
+                    <!--last name-->
+                    <div class="form-group">
+                        <label for="lastName">Last Name <span style="color: red;" class="required-field">*</span></label>
+                        <input type="text" class="form-control" pattern="[ a-zA-Z][a-zA-Z ]+" 
+                            placeholder="Enter Last Name" [(ngModel)]="formData.lastName" 
+                            name="lastName" required #lastName="ngModel">
+                        <div *ngIf="createUserForm.submitted && lastName.invalid || lastName.touched">
+                            <div *ngIf="lastName.touched || createUserForm.submitted">
+                                <p *ngIf="lastName.errors?.required " class="help-bpx" class="help-bpx"
+                                    style="color: red;">Please enter last name.</p>
+                                <p *ngIf="lastName.errors?.pattern" class="help-bpx"
+                                    class="help-bpx" style="color: red;">
+                                    Please enter valid name</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--dob-->
+                    <div class="form-group">
+                        <label for="dob">Last Name <span style="color: red;" class="required-field">*</span></label>
+                        <input class="form-control" type="date" value="2011-08-19"
+                                id="dob" name="dob" [(ngModel)]="formData.dob" required #dob="ngModel">
+                        <div *ngIf="createUserForm.submitted && dob.invalid || dob.touched">
+                            <div *ngIf="dob.touched || createUserForm.submitted">
+                                <p *ngIf="dob.errors?.required " class="help-bpx" class="help-bpx"
+                                    style="color: red;">Please enter dob</p>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!--address-->
+                    <div class="form-group">
+                        <label for="address">Address<span style="color: red;" class="required-field">*</span></label>
+                        <input type="text" class="form-control" 
+                            placeholder="Enter address" [(ngModel)]="formData.address" 
+                            name="address" required #address="ngModel">
+                        <div *ngIf="createUserForm.submitted && address.invalid || address.touched">
+                            <div *ngIf="address.touched || createUserForm.submitted">
+                                <p *ngIf="address.errors?.required " class="help-bpx" class="help-bpx"
+                                    style="color: red;">Please enter address</p>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!--Mobile-->
+                    <div class="form-group">
+                        <label for="mobile">Mobile<span style="color: red;" class="required-field">*</span></label>
+                        <input type="text" class="form-control mb-2 mobile-input" placeholder="Mobile Number"
+                                pattern="[1-9]{1}[0-9]{9}" [(ngModel)]="formData.mobile" name="mobile"
+                                #mobile="ngModel" required>
+                        <div *ngIf="createUserForm.submitted && mobile.invalid || mobile.touched">
+                            <div *ngIf="mobile.touched || createUserForm.submitted">
+                                <p *ngIf="mobile.errors?.required " class="help-bpx" class="help-bpx"
+                                    style="color: red;">Please enter mobile</p>
+                                <p *ngIf="mobile.errors?.pattern" class="help-bpx"
+                                    class="help-bpx" style="color: red;">
+                                    Please enter valid mobile</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--city-->
+                    <div class="form-group">
+                        <label for="city">City<span style="color: red;" class="required-field">*</span></label>
+                        <input type="text" class="form-control" pattern="[ a-zA-Z][a-zA-Z ]+" 
+                            placeholder="Enter city" [(ngModel)]="formData.city" 
+                            name="city" required #city="ngModel">
+                        <div *ngIf="createUserForm.submitted && city.invalid || city.touched">
+                            <div *ngIf="city.touched || createUserForm.submitted">
+                                <p *ngIf="city.errors?.required " class="help-bpx" class="help-bpx"
+                                    style="color: red;">Please enter city</p>
+                                <p *ngIf="city.errors?.pattern" class="help-bpx"
+                                    class="help-bpx" style="color: red;">
+                                    Please enter city</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-view text-center button-save">{{btnName}}</button>
+                    </div>
+                </form>
+            </div>
+            <!--Form end-->
+        </div>
+    </div>
+</div>
